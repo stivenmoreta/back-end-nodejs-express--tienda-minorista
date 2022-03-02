@@ -6,8 +6,8 @@ const {
 
 const router = Router();
 
-router.get("/register", createNewCliente);
-router.get("/login", loginCliente);
+router.post("/registration", createNewCliente);
+router.post("/login", loginCliente);
 
 
 module.exports = router;
