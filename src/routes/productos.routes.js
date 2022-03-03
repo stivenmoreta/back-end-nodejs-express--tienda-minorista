@@ -6,18 +6,18 @@ const {
   createProducto,
   updateProducto,
   deleteProducto,
-  activateProducto
+  activateProducto,
 } = require("../controllers/productos.controller");
-const { verifyToken, isGestor} = require("../middlewares/auth.jwt");
+const { verifyToken, isGestor } = require("../middlewares/auth.jwt");
 
 const router = Router();
 
-router.get("/", verifyToken, getProductosDisponibles);
-router.get("/registrados", [verifyToken,isGestor], getProductosRegistrados); //listo
-router.get("/:id_producto", verifyToken, getProducto); //listo
-router.post("/", [verifyToken, isGestor], createProducto); //listo
-router.put("/:id_producto", [verifyToken, isGestor], updateProducto); //listo
-router.delete("/:id_producto", [verifyToken,isGestor],deleteProducto);//listo
-router.put("/activate/:id_producto", [verifyToken,isGestor],activateProducto);//listo
+router.get("/", getProductosDisponibles); //--
+router.get("/registrados", [verifyToken, isGestor], getProductosRegistrados); //--
+router.get("/:id_producto", getProducto); //--
+router.post("/", [verifyToken, isGestor], createProducto); //--
+router.put("/:id_producto", [verifyToken, isGestor], updateProducto); //--
+router.delete("/:id_producto", [verifyToken, isGestor], deleteProducto); //--
+router.put("/activate/:id_producto", [verifyToken, isGestor], activateProducto); //--
 
 module.exports = router;

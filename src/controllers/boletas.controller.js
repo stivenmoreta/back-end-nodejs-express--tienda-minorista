@@ -5,6 +5,15 @@ const getBoletas = async (req, res) => {
   res.json(allBoletas.rows);
 };
 
+const getMisBoletas = async (req, res) => {
+  const { id_cliente } = req.headers;
+  const allBoletas = await pool.query(
+    'SELECT * FROM "BOLETA" WHERE fk_id_cliente = $1',
+    [id_cliente]
+  );
+  res.json(allBoletas.rows);
+};
+
 const getBoleta = async (req, res) => {
   const { id_cliente, num_boleta } = req.params;
   const boleta = await pool.query(
@@ -30,8 +39,8 @@ const getBoleta = async (req, res) => {
 
 const newBoleta = async (req, res) => {
   try {
-    const { id_cliente } = req.headers; 
-    const comprar = req.body; 
+    const { id_cliente } = req.headers;
+    const comprar = req.body;
     console.log(comprar);
     console.log(id_cliente);
     //retorar el num de la boleta para poder usarla en el detalle
@@ -62,6 +71,7 @@ const newBoleta = async (req, res) => {
 
 module.exports = {
   getBoletas,
+  getMisBoletas,
   getBoleta,
   newBoleta,
 };
