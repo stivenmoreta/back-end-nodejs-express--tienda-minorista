@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const router = require("express").Router();
 const {
   getProductosDisponibles,
   getProductosRegistrados,
@@ -9,8 +9,6 @@ const {
   activateProducto,
 } = require("../controllers/productos.controller");
 const { verifyToken, isGestor } = require("../middlewares/auth.jwt");
-
-const router = Router();
 
 router.get("/", getProductosDisponibles); //--
 router.get("/registrados", [verifyToken, isGestor], getProductosRegistrados); //--
