@@ -11,7 +11,7 @@ const productoRoutes = require("./routes/productos.routes");
 const boletaRoutes = require("./routes/boletas.routes");
 const clienteRoutes = require("./routes/clientes.routes");
 const usuarioRoutes = require("./routes/usuarios.routes");
-
+const categoriaRoutes = require("./routes/categorias.routes");
 
 // Middlewares
 app.use(cors());
@@ -19,6 +19,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // Rutas
+app.use("/api/categoria", categoriaRoutes);
 app.use("/api/producto", productoRoutes);
 app.use("/api/boleta", boletaRoutes);
 app.use("/api/cliente", clienteRoutes);
