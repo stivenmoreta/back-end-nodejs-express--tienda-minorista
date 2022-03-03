@@ -3,6 +3,12 @@ const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv")
 dotenv.config()
 const jwt = require("jsonwebtoken");
+
+
+/**
+ * Creacion de un nuevo cliente
+ * @param {*} req.body datos necesarios para la compra en la tienda
+ */
 const createNewCliente = async (req, res) => {
   const {
     rut_cliente,
@@ -50,6 +56,11 @@ const createNewCliente = async (req, res) => {
   res.json({token});
 };
 
+
+/**
+ * Login para el cliente
+ * @param {*} req.body correo_electronico y contraseña para autentificar
+ */
 const loginCliente = async (req, res) => {
   const {correo_electronico_cliente,contrasena_cliente} = req.body
   const correoFound = await pool.query(`SELECT contrasena_cliente,rut_cliente FROM "CLIENTE" WHERE correo_electronico_cliente = $1 `,[correo_electronico_cliente])

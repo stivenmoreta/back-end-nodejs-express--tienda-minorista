@@ -1,10 +1,18 @@
 const pool = require("../db");
 
+/**
+ * Obtencion de todas las boletas para el usuarios gestor
+ */
 const getBoletas = async (req, res) => {
   const allBoletas = await pool.query('SELECT * FROM "BOLETA"');
   res.json(allBoletas.rows);
 };
 
+
+/**
+ * Obtencion de las boletas solo del usuario que las consulta
+ * @param {*} req.headers enviar el id del cliente
+ */
 const getMisBoletas = async (req, res) => {
   const { id_cliente } = req.headers;
   const allBoletas = await pool.query(
@@ -14,6 +22,10 @@ const getMisBoletas = async (req, res) => {
   res.json(allBoletas.rows);
 };
 
+/**
+ * Detalle de la boleta para el cliente y el usuario gestor
+ * @param {*} req.params enviar el id_cliente y el num_boleta que se desea buscar
+ */
 const getBoleta = async (req, res) => {
   const { id_cliente, num_boleta } = req.params;
   const boleta = await pool.query(
@@ -37,6 +49,11 @@ const getBoleta = async (req, res) => {
   res.json(boleta.rows);
 };
 
+/**
+ * Al realizar una compra este controlador genera la boleta
+ * @param {*} req.headers ingresar el id_cliente que realiza la compra
+ * @param {*} res.body  trae un array con los objetos que se compran
+ */
 const newBoleta = async (req, res) => {
   try {
     const { id_cliente } = req.headers;

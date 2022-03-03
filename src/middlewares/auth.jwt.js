@@ -2,7 +2,11 @@ const jwt = require("jsonwebtoken");
 const pool = require("../db");
 
 
-
+/**
+ * verificador de tokens
+ * @param {*} req.headers necesita un token para entrar a rutas protegidas
+ * @returns 
+ */
 const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers["x-access-token"];

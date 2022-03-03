@@ -1,11 +1,19 @@
 const pool = require("../db");
 
+
+/**
+ * Productos disponibles en la tienda
+ */
 const getProductosDisponibles = async (req, res) => {
   const allProductos = await pool.query(
     'SELECT id_producto, nombre_producto, precio_producto, stock_producto FROM "PRODUCTO" WHERE eliminado = false and stock_producto > 0'
   );
   res.json(allProductos.rows);
 };
+
+/**
+ * Productos registrados y que no estan eliminados para el usuario gestor
+ */
 const getProductosRegistrados = async (req, res) => {
   const allProductos = await pool.query(
     'SELECT id_producto, nombre_producto, precio_producto, stock_producto, eliminado FROM "PRODUCTO" where eliminado = false'
@@ -13,6 +21,10 @@ const getProductosRegistrados = async (req, res) => {
   res.json(allProductos.rows);
 };
 
+/**
+ * Producto que se desea buscar
+ * @param {*} req.params id_producto que se desea buscar
+ */
 const getProducto = async (req, res) => {
   const { id_producto } = req.params;
   const producto = await pool.query(
@@ -21,6 +33,11 @@ const getProducto = async (req, res) => {
   );
   res.json(producto.rows[0]);
 };
+
+/**
+ * agregar nuevos productos
+ * @param {*} req.body ingresar datos del producto que se desea agregar
+ */
 const createProducto = async (req, res) => {
   const { fk_id_categoria, nombre_producto, precio_producto, stock_producto } =
     req.body;
@@ -30,6 +47,12 @@ const createProducto = async (req, res) => {
   );
   res.json(newProducto.rows);
 };
+
+/**
+ * 
+ * @param {*} req.params id_producto que se deasea actualizar
+ * @param {*} req.body informacion del producto que se desea actualizar
+ */
 const updateProducto = async (req, res) => {
   const { id_producto } = req.params;
   const { fk_id_categoria, nombre_producto, precio_producto, stock_producto } =
@@ -47,6 +70,10 @@ const updateProducto = async (req, res) => {
   res.json(allproductos.rows);
 };
 
+/**
+ * producto a eliminar
+ * @param {*} req.params id_producto que se desea eliminar
+ */
 const deleteProducto = async (req, res) => {
   try {
     const { id_producto } = req.params;
@@ -61,6 +88,10 @@ const deleteProducto = async (req, res) => {
   }
 };
 
+/**
+ * recuperacion del producto eliminado
+ * @param {*} req.params id_producto que se desea recuperar
+ */
 const activateProducto = async (req, res) => {
   try {
     const { id_producto } = req.params;

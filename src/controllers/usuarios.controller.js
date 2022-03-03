@@ -4,6 +4,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 const jwt = require("jsonwebtoken");
 
+/**
+ * crea un nuevo usuario
+ * @param {*} req.body Datos necesarios para la creaccion del usuario
+ */
 const createNewUsuario = async (req, res) => {
   const {
     rut_usuario,
@@ -91,6 +95,10 @@ const createNewUsuario = async (req, res) => {
   res.json({ token, nick_usuario, contrasena_usuario });
 };
 
+/**
+ * Genera token para autentificarse en funciones que lo necesitan
+ * @param {*} req.body nick y contraseña para logearse
+ */
 const loginUsuario = async (req, res) => {
   const { nick_usuario, contrasena_usuario } = req.body;
   const usuarioFound = await pool.query(
