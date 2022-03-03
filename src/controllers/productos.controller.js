@@ -1,12 +1,12 @@
 const pool = require("../db");
 
-
 /**
  * Productos disponibles en la tienda
  */
 const getProductosDisponibles = async (req, res) => {
   const allProductos = await pool.query(
-    'SELECT id_producto, nombre_producto, precio_producto, stock_producto FROM "PRODUCTO" WHERE eliminado = false and stock_producto > 0'
+    `SELECT fk_id_categoria,id_producto, nombre_producto, precio_producto, stock_producto 
+    FROM "PRODUCTO" WHERE eliminado = false and stock_producto > 0`
   );
   res.json(allProductos.rows);
 };
@@ -49,16 +49,16 @@ const createProducto = async (req, res) => {
 };
 
 /**
- * 
+ *
  * @param {*} req.params id_producto que se deasea actualizar
  * @param {*} req.body informacion del producto que se desea actualizar
  */
 const updateProducto = async (req, res) => {
   const { id_producto } = req.params;
-  const { fk_id_categoria, nombre_producto, precio_producto, stock_producto } =
-    req.body;
+  const { fk_id_categoria, nombre_producto, precio_producto, stock_producto } = req.body;
   const allproductos = await pool.query(
-    'UPDATE "PRODUCTO" SET fk_id_categoria=$1, nombre_producto=$2, precio_producto=$3, stock_producto=$4 WHERE id_producto=$5',
+    `UPDATE "PRODUCTO" SET fk_id_categoria=$1, nombre_producto=$2, precio_producto=$3, stock_producto=$4 
+    WHERE id_producto=$5 RETURNING *`,
     [
       fk_id_categoria,
       nombre_producto,
@@ -113,5 +113,5 @@ module.exports = {
   createProducto,
   updateProducto,
   deleteProducto,
-  activateProducto
+  activateProducto,
 };

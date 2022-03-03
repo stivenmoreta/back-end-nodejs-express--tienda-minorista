@@ -1,3 +1,5 @@
+-- object: public."USUARIO" | type: TABLE --
+-- DROP TABLE IF EXISTS public."USUARIO" CASCADE;
 CREATE TABLE public."USUARIO" (
 	id_usuario serial NOT NULL,
 	rut_usuario varchar(8),
@@ -107,80 +109,12 @@ CREATE TABLE public."CLIENTE" (
 	apellido_cliente varchar(100),
 	correo_electronico_cliente varchar(100),
 	numero_tel_cel_cliente varchar(15),
-	contrasena_cliente varchar(50),
+	contrasena_cliente varchar(115),
 	direccion_cliente varchar(100),
 	CONSTRAINT "CLIENTE_pk" PRIMARY KEY (id_cliente)
 );
 -- ddl-end --
 ALTER TABLE public."CLIENTE" OWNER TO postgres;
--- ddl-end --
-
--- object: public."PROVEEDOR" | type: TABLE --
--- DROP TABLE IF EXISTS public."PROVEEDOR" CASCADE;
-CREATE TABLE public."PROVEEDOR" (
-	id_proveedor serial NOT NULL,
-	nombre_proveedor varchar(200),
-	direccion_proveedor varchar(50),
-	CONSTRAINT "PROVEEDOR_pk" PRIMARY KEY (id_proveedor)
-);
--- ddl-end --
-ALTER TABLE public."PROVEEDOR" OWNER TO postgres;
--- ddl-end --
-
--- object: public."FACTURA" | type: TABLE --
--- DROP TABLE IF EXISTS public."FACTURA" CASCADE;
-CREATE TABLE public."FACTURA" (
-	num_factura serial NOT NULL,
-	fk_id_usuario integer,
-	fk_id_proveedor integer,
-	fecha date,
-	estado_factura boolean,
-	CONSTRAINT "ORDEN_COMPRA_pk" PRIMARY KEY (num_factura)
-);
--- ddl-end --
-COMMENT ON COLUMN public."FACTURA".estado_factura IS E'true si ya se realizo la compra, false si la compra aun no se realiza';
--- ddl-end --
-ALTER TABLE public."FACTURA" OWNER TO postgres;
--- ddl-end --
-
--- object: public."DETALLE_FACTURA" | type: TABLE --
--- DROP TABLE IF EXISTS public."DETALLE_FACTURA" CASCADE;
-CREATE TABLE public."DETALLE_FACTURA" (
-	num_detalle_factura integer NOT NULL,
-	id_factura integer NOT NULL,
-	fk_id_producto_factura integer,
-	cantidad_producto_factura integer,
-	precio_producto_factura integer,
-	CONSTRAINT "DETALLE_ORDEN_COMPRA_pk" PRIMARY KEY (num_detalle_factura,id_factura)
-);
--- ddl-end --
-COMMENT ON COLUMN public."DETALLE_FACTURA".id_factura IS E'fk de el num de orden de compra';
--- ddl-end --
-ALTER TABLE public."DETALLE_FACTURA" OWNER TO postgres;
--- ddl-end --
-
--- object: public."PRODUCTO_FACTURA" | type: TABLE --
--- DROP TABLE IF EXISTS public."PRODUCTO_FACTURA" CASCADE;
-CREATE TABLE public."PRODUCTO_FACTURA" (
-	id_producto_factura serial NOT NULL,
-	fk_id_categoria_factura integer,
-	nombre_producto_factura varchar(200),
-	CONSTRAINT "PRODUCTO_ORDEN_COMPRA_pk" PRIMARY KEY (id_producto_factura)
-);
--- ddl-end --
-ALTER TABLE public."PRODUCTO_FACTURA" OWNER TO postgres;
--- ddl-end --
-
--- object: public."CATEGORIA_FACTURA" | type: TABLE --
--- DROP TABLE IF EXISTS public."CATEGORIA_FACTURA" CASCADE;
-CREATE TABLE public."CATEGORIA_FACTURA" (
-	id_categoria_factura serial NOT NULL,
-	nombre_categoria_factura varchar(100),
-	descripccion_categoria_factura varchar(200),
-	CONSTRAINT "CATEGORIA_ORDEN_COMPRA_pk" PRIMARY KEY (id_categoria_factura)
-);
--- ddl-end --
-ALTER TABLE public."CATEGORIA_FACTURA" OWNER TO postgres;
 -- ddl-end --
 
 -- object: fk_id_usuario | type: CONSTRAINT --
@@ -222,41 +156,6 @@ ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ALTER TABLE public."BOLETA" DROP CONSTRAINT IF EXISTS fk_id_cliente CASCADE;
 ALTER TABLE public."BOLETA" ADD CONSTRAINT fk_id_cliente FOREIGN KEY (fk_id_cliente)
 REFERENCES public."CLIENTE" (id_cliente) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
-
--- object: fk_id_usuario_ | type: CONSTRAINT --
--- ALTER TABLE public."FACTURA" DROP CONSTRAINT IF EXISTS fk_id_usuario_ CASCADE;
-ALTER TABLE public."FACTURA" ADD CONSTRAINT fk_id_usuario_ FOREIGN KEY (fk_id_usuario)
-REFERENCES public."USUARIO" (id_usuario) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
-
--- object: fk_id_proveedor | type: CONSTRAINT --
--- ALTER TABLE public."FACTURA" DROP CONSTRAINT IF EXISTS fk_id_proveedor CASCADE;
-ALTER TABLE public."FACTURA" ADD CONSTRAINT fk_id_proveedor FOREIGN KEY (fk_id_proveedor)
-REFERENCES public."PROVEEDOR" (id_proveedor) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
-
--- object: fk_id_producto_oc | type: CONSTRAINT --
--- ALTER TABLE public."DETALLE_FACTURA" DROP CONSTRAINT IF EXISTS fk_id_producto_oc CASCADE;
-ALTER TABLE public."DETALLE_FACTURA" ADD CONSTRAINT fk_id_producto_oc FOREIGN KEY (fk_id_producto_factura)
-REFERENCES public."PRODUCTO_FACTURA" (id_producto_factura) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
-
--- object: fk_id_oc_num_oc | type: CONSTRAINT --
--- ALTER TABLE public."DETALLE_FACTURA" DROP CONSTRAINT IF EXISTS fk_id_oc_num_oc CASCADE;
-ALTER TABLE public."DETALLE_FACTURA" ADD CONSTRAINT fk_id_oc_num_oc FOREIGN KEY (id_factura)
-REFERENCES public."FACTURA" (num_factura) MATCH SIMPLE
-ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
-
--- object: fk_id_categoria_oc | type: CONSTRAINT --
--- ALTER TABLE public."PRODUCTO_FACTURA" DROP CONSTRAINT IF EXISTS fk_id_categoria_oc CASCADE;
-ALTER TABLE public."PRODUCTO_FACTURA" ADD CONSTRAINT fk_id_categoria_oc FOREIGN KEY (fk_id_categoria_factura)
-REFERENCES public."CATEGORIA_FACTURA" (id_categoria_factura) MATCH SIMPLE
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
