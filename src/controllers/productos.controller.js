@@ -55,19 +55,42 @@ const createProducto = async (req, res) => {
  */
 const updateProducto = async (req, res) => {
   const { id_producto } = req.params;
-  const { fk_id_categoria, nombre_producto, precio_producto, stock_producto } = req.body;
-  const allproductos = await pool.query(
+  const {
+    new_fk_id_categoria,
+    new_nombre_producto,
+    new_precio_producto,
+    new_stock_producto,
+  } = req.body;
+
+  const productOld = await pool.query(
+    `
+    SELECT fk_id_categoria,nombre_producto,precio_producto,stock_producto FROM "PRODUCTO" WHERE id_producto=$1
+  `,
+    [id_producto]
+  );
+  const {
+    fk_id_categoria: old_fk_id_categoria,
+    nombre_producto: old_nombre_producto,
+    precio_producto: old_precio_producto,
+    stock_producto: old_stock_producto,
+  } = productOld.rows[0];
+
+  const productoUpdate = await pool.query(
     `UPDATE "PRODUCTO" SET fk_id_categoria=$1, nombre_producto=$2, precio_producto=$3, stock_producto=$4 
     WHERE id_producto=$5 RETURNING *`,
     [
-      fk_id_categoria,
-      nombre_producto,
-      precio_producto,
-      stock_producto,
+      new_fk_id_categoria.length === 0
+        ? old_fk_id_categoria
+        : new_fk_id_categoria,
+      new_nombre_producto.length === 0
+        ? old_nombre_producto
+        : new_nombre_producto,
+      new_precio_producto > 0 ? new_precio_producto : old_precio_producto,
+      new_stock_producto > 0 ? new_stock_producto : old_stock_producto,
       id_producto,
     ]
   );
-  res.json(allproductos.rows);
+  res.json(productoUpdate.rows);
 };
 
 /**

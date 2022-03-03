@@ -10,12 +10,7 @@ const verifyToken = async (req, res, next) => {
   try {
     const token = req.headers["x-access-token"];
     if (!token) return res.status(403).json({ message: "Ingrese un token" });
-    console.log("------------TOKEN------------");
-    console.log(token);
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
-
-    console.log("-----------TOKEN DECODIFICADO-----------");
-    console.log(decoded);
     let user = {};
     if (Object.keys(decoded).length === 6) {
       user = await pool.query(
@@ -24,7 +19,6 @@ const verifyToken = async (req, res, next) => {
       );
       req.id_rol = decoded.id4;
       console.log("usuario");
-      console.log(req.id_rol);
     } else {
       user = await pool.query(
         `SELECT * FROM "CLIENTE" WHERE rut_cliente = $1`,
@@ -33,8 +27,6 @@ const verifyToken = async (req, res, next) => {
       console.log("cliente");
     }
 
-    console.log("---------USUARIO---------");
-    console.log(user);
     if (user.rows.length === 0)
       return res
         .status(404)
@@ -52,7 +44,6 @@ const isAdmin = async (req, res, next) => {
     `SELECT nombre_rol FROM "ROL" WHERE id_rol = $1`,
     [req.id_rol]
   );
-  console.log(isAdmin.rows[0].nombre_rol);
   if (isAdmin.rows[0].nombre_rol === "admin") {
     next();
   } else {
@@ -66,7 +57,7 @@ const isGestor = async (req, res, next) => {
     `SELECT nombre_rol FROM "ROL" WHERE id_rol = $1`,
     [req.id_rol]
   );
-  console.log(isGestor.rows[0].nombre_rol);
+
   if (isGestor.rows[0].nombre_rol === "gestor") {
     next();
   } else {

@@ -35,4 +35,8 @@ INSERT INTO "PRODUCTO"(fk_id_categoria, nombre_producto,precio_producto,stock_pr
 VALUES (4, 'Laser',1000,10);
 SELECT * FROM "PRODUCTO"
 
-ALTER COLUMN contrasena_cliente type varchar(115)
+UPDATE "PRODUCTO" SET eliminado=false;
+
+INSERT INTO "ROL"(nombre_rol) values ('admin');
+INSERT INTO "ROL"(nombre_rol) values ('gestor');
+INSERT INTO "ROL"(nombre_rol) values ('marketing');
